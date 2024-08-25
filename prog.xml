@@ -1,0 +1,525 @@
+<PROGRAM>
+    <VARDECLARATION>
+        <VAR = direction>
+            <TYPE>INT</TYPE>
+            <VALUES><VALUE>0</VALUE></VALUES>
+        </VAR>
+        <VAR = L>
+            <TYPE>INT</TYPE>
+            <VALUES><VALUE>5</VALUE></VALUES>
+        </VAR>
+
+        <VAR = X_SIZE>
+            <TYPE>INT</TYPE>
+            <VALUES><ADD><MUL><VAR name = L></VAR><VALUE>2</VALUE></MUL><VALUE>1</VALUE></ADD></VALUES>
+        </VAR>
+        <VAR = Y_SIZE>
+            <TYPE>INT</TYPE>
+            <VALUES><ADD><MUL><VAR name = L></VAR><VALUE>2</VALUE></MUL><VALUE>1</VALUE></ADD></VALUES>
+        </VAR>
+        <VAR = x>
+            <TYPE>INT</TYPE>
+            <VALUES><VAR name = L></VAR></VALUES>
+        </VAR>
+        <VAR = y>
+            <TYPE>INT</TYPE>
+            <VALUES><VAR name = L></VAR></VALUES>
+        </VAR>
+
+        <VAR = MAP>
+            <TYPE>CELL</TYPE>
+            <DIMENTIONS count = 2>
+                <DIMENSION><VAR name = X_SIZE></VAR></DIMENSION>
+                <DIMENSION><VAR name = Y_SIZE></VAR></DIMENSION>
+            </DIMENTIONS>
+        </VAR>
+
+        <VAR = d>
+            <TYPE>INT</TYPE>
+        </VAR>
+
+    </VARDECLARATION>
+
+    <FUNC name = extend>
+        <VARDECLARATION>
+            <VAR = shift_x>
+                <TYPE>INT</TYPE>
+                <VALUES><VALUE>0</VALUE></VALUES>
+            </VAR>
+            <VAR = shift_y>
+                <TYPE>INT</TYPE>
+                <VALUES><VALUE>0</VALUE></VALUES>
+            </VAR>
+            <VAR = add_x>
+                <TYPE>INT</TYPE>
+                <VALUES><VALUE>0</VALUE></VALUES>
+            </VAR>
+            <VAR = add_y>
+                <TYPE>INT</TYPE>
+                <VALUES><VALUE>0</VALUE></VALUES>
+            </VAR>
+        </VARDECLARATION>
+
+        <SWITCH>
+            <CONDITION>
+                <CHECK><EQ><VAR name = x></VAR><SUB><VAR name = X_SIZE></VAR><VALUE>1</VALUE></SUB></EQ></CHECK>
+                <DO>
+                    <ASSIGN><VAR name = L></VAR><TO><VAR name = add_x></VAR></TO></ASSIGN>
+                </DO>
+            </CONDITION>
+            <CONDITION>
+                <CHECK><EQ><VAR name = x></VAR><VALUE>0</VALUE></EQ></CHECK>
+                <DO>
+                    <ASSIGN><VAR name = L></VAR><TO><VAR name = add_x></VAR><VAR name = shift_x></VAR></TO></ASSIGN>
+                </DO>
+            </CONDITION>
+        </SWITCH>
+
+        <SWITCH>
+            <CONDITION>
+                <CHECK><EQ><VAR name = y></VAR><SUB><VAR name = Y_SIZE></VAR><VALUE>1</VALUE></SUB></EQ></CHECK>
+                <DO>
+                    <ASSIGN><VAR name = L></VAR><TO><VAR name = add_y></VAR></TO></ASSIGN>
+                </DO>
+            </CONDITION>
+            <CONDITION>
+                <CHECK><EQ><VAR name = y></VAR><VALUE>0</VALUE></EQ></CHECK>
+                <DO>
+                    <ASSIGN><VAR name = L></VAR><TO><VAR name = add_y></VAR><VAR name = shift_y></VAR></TO></ASSIGN>
+                </DO>
+            </CONDITION>
+        </SWITCH>
+
+
+        <SWITCH>
+            <CONDITION>
+                <CHECK><OR><VAR name = add_x></VAR><VAR name = add_y></VAR></OR></CHECK>
+                <DO>
+                    <VARDECLARATION>
+                        <VAR = newMAP>
+                            <TYPE>CELL</TYPE>
+                            <DIMENTIONS count = 2>
+                                <DIMENSION><ADD><VAR name = X_SIZE></VAR><VAR name = add_x></VAR></ADD></DIMENSION>
+                                <DIMENSION><ADD><VAR name = Y_SIZE></VAR><VAR name = add_y></VAR></ADD></DIMENSION>
+                            </DIMENTIONS>
+                        </VAR>
+                        <VAR = i>
+                            <TYPE>INT</TYPE>
+                        </VAR>
+                    </VARDECLARATION> 
+
+                    <WHILE>
+                        <CHECK><NOT><EQ><VAR name = i></VAR><ADD><VAR name = X_SIZE></VAR><VAR name = L></VAR></ADD></EQ></NOT></CHECK>
+                    <DO>
+                        <VARDECLARATION>
+                            <VAR = j>
+                                <TYPE>INT</TYPE>
+                            </VAR>
+                        </VARDECLARATION>
+                        <WHILE>
+                            <CHECK><NOT><EQ><VAR name = y></VAR><ADD><VAR name = Y_SIZE></VAR><VAR name = L></VAR></ADD></EQ></NOT></CHECK>
+                        <DO>
+                            <ASSIGN> 
+                                <VAR name = MAP><DIM>
+                                        <INDEX><VAR name = i></VAR></INDEX>
+                                        <INDEX><VAR name = j></VAR></INDEX>
+                                </DIM></VAR>
+                                <TO>
+                                    <VAR name = newMAP><DIM>
+                                            <INDEX><ADD><VAR name = i></VAR><VAR name = shift_x></VAR></ADD></INDEX>
+                                            <INDEX><ADD><VAR name = j></VAR><VAR name = shift_y></VAR></ADD></INDEX>
+                                    </DIM></VAR>
+                                </TO>
+                            </ASSIGN> 
+
+                            <ASSIGN><ADD><VAR name = j></VAR><VALUE>1</VALUE></ADD><TO><VAR name = j></VAR></TO></ASSIGN>
+                        </WHILE>
+
+                        <ASSIGN><ADD><VAR name = i></VAR><VALUE>1</VALUE></ADD><TO><VAR name = i></VAR></TO></ASSIGN>
+                    </WHILE>
+
+                    <ASSIGN> 
+                        <VAR name = newMAP></VAR>
+                        <TO><VAR name = MAP></VAR></TO>
+                    </ASSIGN>
+                    <ASSIGN>
+                        <ADD><VAR name = X_SIZE></VAR><VAR name = add_x></VAR></ADD> 
+                        <TO><VAR name = X_SIZE></VAR></TO>
+                    </ASSIGN>
+                    <ASSIGN>
+                        <ADD><VAR name = Y_SIZE></VAR><VAR name = add_y></VAR></ADD> 
+                        <TO><VAR name = Y_SIZE></VAR></TO>
+                    </ASSIGN>
+                    <ASSIGN>
+                        <ADD><VAR name = x></VAR><VAR name = shift_x></VAR></ADD> 
+                        <TO><VAR name = x></VAR></TO>
+                    </ASSIGN>
+                    <ASSIGN>
+                        <ADD><VAR name = y></VAR><VAR name = shift_y></VAR></ADD> 
+                        <TO><VAR name = y></VAR></TO>
+                    </ASSIGN>
+                </DO>
+            </CONDITION>
+        </SWITCH>
+    </FUNC>
+
+    <FUNC name = scan>
+        <VARDECLARATION>
+            <VAR = scanned>
+                <TYPE>CELL</TYPE>
+                <DIMENTIONS count = 2>
+                    <DIMENSION><ADD><MUL><VAR name = L></VAR><VALUE>2</VALUE></MUL><VALUE>1</VALUE></ADD></DIMENSION>
+                    <DIMENSION><ADD><MUL><VAR name = L></VAR><VALUE>2</VALUE></MUL><VALUE>1</VALUE></ADD></DIMENSION>
+                </DIMENTIONS>
+            </VAR>
+            <VAR = i>
+                <TYPE>INT</TYPE>
+            </VAR>
+        </VARDECLARATION>
+        <ASSIGN>
+            <SENDDRONS><VALUE>1</VALUE></SENDDRONS>
+            <TO><VAR name = scanned></VAR></TO>
+        </ASSIGN>
+
+        <WHILE>
+            <CHECK><NOT><EQ>
+                <VAR name = i></VAR>
+                <ADD><MUL><VAR name = L></VAR><VALUE>2</VALUE></MUL><VALUE>1</VALUE></ADD>
+            </EQ></NOT></CHECK>
+        <DO>
+            <VARDECLARATION>
+                <VAR = j>
+                    <TYPE>INT</TYPE>
+                </VAR>
+            </VARDECLARATION>
+            <WHILE>
+                <CHECK><NOT><EQ>
+                    <VAR name = j></VAR>
+                    <ADD><MUL><VAR name = L></VAR><VALUE>2</VALUE></MUL><VALUE>1</VALUE></ADD>
+                </EQ></NOT></CHECK>
+            <DO>
+                <SWITCH>
+                    <CONDITION>
+                        <CHECK>
+                            <AND>
+                                <NOT><EQ>
+                                    <VAR name = scanned><DIM>
+                                        <INDEX><VAR name = i></VAR></INDEX>
+                                        <INDEX><VAR name = j></VAR></INDEX>
+                                    </DIM></VAR>
+                                    <VALUE>UNDEF</VALUE>
+                                </EQ></NOT>
+                                
+                                <EQ>
+                                    <MIN>
+                                        <SUB>
+                                            <ADD><VAR name = x></VAR><VAR name = i></VAR></ADD>
+                                            <VAR name = L></VAR>
+                                        </SUB>
+                                        <VALUE>0</VALUE>
+                                    </MIN>
+                                    <VALUE>0</VALUE>
+                                </EQ>
+                                <EQ>
+                                    <MAX>
+                                        <SUB>
+                                            <ADD><VAR name = x></VAR><VAR name = i></VAR></ADD>
+                                            <VAR name = L></VAR>
+                                        </SUB>
+                                        <SUB>
+                                            <VAR name = X_SIZE></VAR>
+                                            <VALUE>1</VALUE>
+                                        </SUB>
+                                    </MAX>
+                                    <SUB>
+                                        <VAR name = X_SIZE></VAR>
+                                        <VALUE>1</VALUE>
+                                    </SUB>
+                                </EQ>
+
+                                <EQ>
+                                    <MIN>
+                                        <SUB>
+                                            <ADD><VAR name = y></VAR><VAR name = j></VAR></ADD>
+                                            <VAR name = L></VAR>
+                                        </SUB>
+                                        <VALUE>0</VALUE>
+                                    </MIN>
+                                    <VALUE>0</VALUE>
+                                </EQ>
+                                <EQ>
+                                    <MAX>
+                                        <SUB>
+                                            <ADD><VAR name = y></VAR><VAR name = j></VAR></ADD>
+                                            <VAR name = L></VAR>
+                                        </SUB>
+                                        <SUB>
+                                            <VAR name = Y_SIZE></VAR>
+                                            <VALUE>1</VALUE>
+                                        </SUB>
+                                    </MAX>
+                                    <SUB>
+                                        <VAR name = Y_SIZE></VAR>
+                                        <VALUE>1</VALUE>
+                                    </SUB>
+                                </EQ>
+                            </AND>
+                        </CHECK>
+
+                        <DO>
+                            <ASSIGN> 
+                                <VAR name = scanned><DIM>
+                                        <INDEX><VAR name = i></VAR></INDEX>
+                                        <INDEX><VAR name = j></VAR></INDEX>
+                                </DIM></VAR>
+                                <TO>
+                                    <VAR name = MAP><DIM>
+                                            <INDEX>
+                                                <SUB>
+                                                    <ADD><VAR name = x></VAR><VAR name = i></VAR></ADD>
+                                                    <VAR name = L></VAR>
+                                                </SUB>
+                                            </INDEX>
+                                            <INDEX>
+                                                <SUB>
+                                                    <ADD><VAR name = y></VAR><VAR name = j></VAR></ADD>
+                                                    <VAR name = L></VAR>
+                                                </SUB>
+                                            </INDEX>
+                                    </DIM></VAR>
+                                </TO>
+                            </ASSIGN> 
+                        </DO>
+                    </CONDITION>
+                </SWITCH>
+                
+                
+                <ASSIGN><ADD><VAR name = j></VAR><VALUE>1</VALUE></ADD><TO><VAR name = j></VAR></TO></ASSIGN>
+            </WHILE>
+            <ASSIGN><ADD><VAR name = i></VAR><VALUE>1</VALUE></ADD><TO><VAR name = i></VAR></TO></ASSIGN>
+        </WHILE>
+
+    </FUNC>
+
+    <FUNC name = step>
+        <SWITCH>
+            <CONDITION>
+                <CHECK><EQ>
+                    <VAR name = direction></VAR>
+                    <VALUE>0</VALUE>
+                </EQ></CHECK>
+                <DO>
+                    <RIGHT><VALUE>1</VALUE></RIGHT>
+                    <ASSIGN>
+                        <ADD><VALUE>1</VALUE><VAR name = x></VAR></ADD>
+                        <TO><VAR name = x></VAR></TO>
+                    </ASSIGN>
+                </DO>
+            </CONDITION>
+            <CONDITION>
+                <CHECK><EQ>
+                    <VAR name = direction></VAR>
+                    <VALUE>1</VALUE>
+                </EQ></CHECK>
+                <DO>
+                    <UP><VALUE>1</VALUE></UP>
+                    <ASSIGN>
+                        <SUB><VAR name = y></VAR><VALUE>1</VALUE></SUB>
+                        <TO><VAR name = y></VAR></TO>
+                    </ASSIGN>
+                </DO>
+            </CONDITION>
+            <CONDITION>
+                <CHECK><EQ>
+                    <VAR name = direction></VAR>
+                    <VALUE>2</VALUE>
+                </EQ></CHECK>
+                <DO>
+                    <LEFT><VALUE>1</VALUE></LEFT>
+                    <ASSIGN>
+                        <SUB><VAR name = x></VAR><VALUE>1</VALUE></SUB>
+                        <TO><VAR name = x></VAR></TO>
+                    </ASSIGN>
+                </DO>
+            </CONDITION>
+            <CONDITION>
+                <CHECK><EQ>
+                    <VAR name = direction></VAR>
+                    <VALUE>3</VALUE>
+                </EQ></CHECK>
+                <DO>
+                    <DOWN><VALUE>1</VALUE></DOWN>
+                    <ASSIGN>
+                        <ADD><VAR name = x></VAR><VALUE>1</VALUE></ADD>
+                        <TO><VAR name = x></VAR></TO>
+                    </ASSIGN>
+                </DO>
+            </CONDITION>
+        </SWITCH>
+    </FUNC>
+
+    <FUNC name = findExit>
+        <GETDRONSCOUNT>d</GETDRONSCOUNT>
+        <WHILE>
+            <CHECK><AND>
+                <VAR name = d></VAR>
+                <NOT><EQ>
+                    <VAR name = MAP>
+                        <DIM>
+                            <INDEX><VAR name = x></VAR></INDEX>
+                            <INDEX><VAR name = y></VAR></INDEX>
+                        </DIM>
+                    </VAR>
+                    <VALUE>EXIT</VALUE>
+                </EQ></NOT>
+            </AND></CHECK>
+        <DO>
+            <CALL>extend</CALL>
+            <VARDECLARATION>
+                <VAR = can_go>
+                    <TYPE>BOOL</TYPE>
+                    <VALUES><VALUE>false</VALUE></VALUES>
+                </VAR>
+                <VAR = x_>
+                    <TYPE>INT</TYPE>
+                    <VALUES><VAR name = x></VAR></VALUES>
+                </VAR>
+                <VAR = y_>
+                    <TYPE>INT</TYPE>
+                    <VALUES><VAR name = y></VAR></VALUES>
+                </VAR>
+            </VARDECLARATION>
+            <WHILE>
+                <CHECK><NOT><VAR name = can_go></VAR></NOT></CHECK>
+            <DO>
+                <ASSIGN><VAR name = x></VAR><TO><VAR name = x_></VAR></TO></ASSIGN>
+                <ASSIGN><VAR name = y></VAR><TO><VAR name = y_></VAR></TO></ASSIGN>
+                <ASSIGN><ADD><VAR name = direction></VAR><VALUE>1</VALUE></ADD><TO><VAR name = direction></VAR></TO></ASSIGN>
+            
+                <SWITCH>
+                    <CONDITION>
+                        <CHECK><EQ><VALUE>4</VALUE><VAR name = direction></VAR></EQ></CHECK>
+                        <DO><ASSIGN><VALUE>0</VALUE><TO><VAR name = direction></VAR></TO></ASSIGN></DO>
+                    </CONDITION>
+                </SWITCH>
+
+                <SWITCH>
+                    <CONDITION>
+                        <CHECK><EQ><VALUE>0</VALUE><VAR name = direction></VAR></EQ></CHECK>
+                        <DO><ASSIGN>
+                            <ADD><VAR name = x></VAR><VALUE>1</VALUE></ADD>
+                            <TO><VAR name = x_></VAR></TO>
+                        </ASSIGN></DO>
+                    </CONDITION>
+                    <CONDITION>
+                        <CHECK><EQ><VALUE>1</VALUE><VAR name = direction></VAR></EQ></CHECK>
+                        <DO><ASSIGN>
+                            <SUB><VAR name = y></VAR><VALUE>1</VALUE></SUB>
+                            <TO><VAR name = y_></VAR></TO>
+                        </ASSIGN></DO>
+                    </CONDITION>
+                    <CONDITION>
+                        <CHECK><EQ><VALUE>2</VALUE><VAR name = direction></VAR></EQ></CHECK>
+                        <DO><ASSIGN>
+                            <SUB><VAR name = x></VAR><VALUE>1</VALUE></SUB>
+                            <TO><VAR name = x_></VAR></TO>
+                        </ASSIGN></DO>
+                    </CONDITION>
+                    <CONDITION>
+                        <CHECK><EQ><VALUE>0</VALUE><VAR name = direction></VAR></EQ></CHECK>
+                        <DO><ASSIGN>
+                            <ADD><VAR name = y></VAR><VALUE>1</VALUE></ADD>
+                            <TO><VAR name = y_></VAR></TO>
+                        </ASSIGN></DO>
+                    </CONDITION>
+                </SWITCH>
+                
+                <GETDRONSCOUNT>d</GETDRONSCOUNT>
+                <WHILE>
+                    <CHECK><AND>
+                        <VAR name = d></VAR>
+                        <EQ>
+                            <VAR name = MAP>
+                                <DIM>
+                                    <INDEX><VAR name = x_></VAR></INDEX>
+                                    <INDEX><VAR name = y_></VAR></INDEX>
+                                </DIM>
+                            </VAR>
+                            <VALUE>UNDEF</VALUE>
+                        </EQ>
+                    </AND></CHECK>
+                <DO>
+                    <CALL>scan</CALL>
+                </WHILE>
+
+                <ASSIGN>
+                    <NOT><EQ>
+                        <VAR name = MAP>
+                            <DIM>
+                                <INDEX><VAR name = x_></VAR></INDEX>
+                                <INDEX><VAR name = y_></VAR></INDEX>
+                            </DIM>
+                        </VAR>
+                        <VALUE>WALL</VALUE>
+                    </EQ></NOT>
+                    <TO>
+                        <VAR name = can_go></VAR>
+                    </TO>
+                </ASSIGN>
+
+                <SWITCH>
+                    <CONDITION>
+                        <CHECK><NOT> <VAR name = can_go></VAR></NOT></CHECK>
+                        <DO>
+                            <ASSIGN>
+                                <SUB> <VAR name = direction></VAR> <VALUE>2</VALUE> </SUB>
+                                <TO> <VAR name = direction></VAR> </TO>
+                            </ASSIGN>
+
+                            <SWITCH>
+                                <CONDITION>
+                                    <CHECK><EQ><MAX><VALUE>0</VALUE><VAR name = direction></VAR></MAX><VALUE>0</VALUE></EQ></CHECK>
+                                    <DO><ASSIGN><ADD><VAR name = direction></VAR><VALUE>4</VALUE></ADD><TO><VAR name = direction></VAR></TO></ASSIGN></DO>
+                                </CONDITION>
+                            </SWITCH>
+                        </DO>
+                    </CONDITION>
+                </SWITCH>
+
+                <SWITCH>
+                    <CONDITION>
+                        <CHECK>
+                            <NOT><OR>
+                                <EQ>
+                                    <VAR name = MAP>
+                                        <DIM>
+                                            <INDEX><VAR name = x_></VAR></INDEX>
+                                            <INDEX><VAR name = y_></VAR></INDEX>
+                                        </DIM>
+                                    </VAR>
+                                    <VALUE>WALL</VALUE>
+                                </EQ>
+                                <EQ>
+                                    <VAR name = MAP>
+                                        <DIM>
+                                            <INDEX><VAR name = x_></VAR></INDEX>
+                                            <INDEX><VAR name = y_></VAR></INDEX>
+                                        </DIM>
+                                    </VAR>
+                                    <VALUE>UNDEF</VALUE>
+                                </EQ>
+                            </OR></NOT>
+                        </CHECK>
+                        <DO>
+                            <CALL>step</CALL>
+                        </DO>
+                    </CONDITION>
+                </SWITCH>
+            </WHILE>
+        </WHILE>
+    </FUNC>
+
+    <FUNC name = main >
+        <CALL>findExit</CALL>
+    </FUNC>
+</PROGRAM>
