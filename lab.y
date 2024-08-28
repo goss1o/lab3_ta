@@ -57,12 +57,12 @@
 %token sys_print
 %%
 program:
-    '<' PROGRAM '>' elements '<''/' PROGRAM '>' {PROG = new ast::statementGrp($4.statements)}
+    '<' PROGRAM '>' elements '<''/' PROGRAM '>' {PROG = new ast::statementGrp($4.statements);}
     ;
 elements:
     elements vardeclaration {$$.statements = $1.statements; $$.statements.push_back($2.st);}
     | elements funcdeclaring {$$.statements = $1.statements; $$.statements.push_back($2.st);}
-    | {$$.statements = {}}
+    | {$$.statements = {};}
     ;
 //-----------------------------------------------------------//
 vardeclaration:
@@ -168,7 +168,7 @@ branches:
     | branch {$$.branches = {$1.branch};}
     ;
 branch:
-    '<'CONDITION'>' '<'CHECK'>'expression'<''/'CHECK'>' '<'DO'>'commands'<''/'DO'>' '<''/'CONDITION'>' {$$.branch = {dynamic_cast<ast::expr*>($7.st), new ast::statementGrp($15.statements)}}
+    '<'CONDITION'>' '<'CHECK'>'expression'<''/'CHECK'>' '<'DO'>'commands'<''/'DO'>' '<''/'CONDITION'>' {$$.branch = {dynamic_cast<ast::expr*>($7.st), new ast::statementGrp($15.statements)};}
     ;
 //-----------------------------------------------------------//
 funcdeclaring:
@@ -197,7 +197,7 @@ command:
     ;
 //-----------------------------------------------------------//
 robot_cmd:
-    robot_moving {$$.st = $1.st}
+    robot_moving {$$.st = $1.st;}
     | '<' GETDRONSCOUNT '>' STR_VAL '<''/' GETDRONSCOUNT '>' {$$.st = new ast::Getdronscount($4.str_val);}
     ;
 robot_moving:
@@ -208,7 +208,7 @@ robot_moving:
     ;
 //-----------------------------------------------------------//
 sys_cmd:
-    '<' sys_print '>' var_get '<''/'sys_print'>' {$$.st = new sys::print(dynamic_cast<ast::varGet *>($4.st));}
+    '<' sys_print '>' expression '<''/'sys_print'>' {$$.st = new sys::print(dynamic_cast<ast::expr *>($4.st));}
     ;
 //-----------------------------------------------------------//
 %%
@@ -228,15 +228,15 @@ int main(int argc, char **argv) {
             std::cout << "SCANNED" <<std::endl;
 
             std::ofstream out;          // поток для записи
-            out.open(argv[2]); 
+            out.open(std::string(argv[2])+".cpp"); 
             CPPtranslator tr(out, argv[3]);
             PROG->translate(tr);
             out.close();
 
             std::cout << "TRANSLATED" <<std::endl;
             std::string cmd(" g++ -Wno-return-type -std=c++20 -g robot/labyrinth.cpp ");
-            cmd += argv[2];
-            cmd += " -o compiled";
+            cmd += std::string(argv[2]) +".cpp";
+            cmd += " -o " + std::string(argv[2]);
             system(cmd.c_str());
 
             std::cout << "COMPILED" <<std::endl;

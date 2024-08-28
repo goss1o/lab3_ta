@@ -38,6 +38,10 @@
             <TYPE>INT</TYPE>
         </VAR>
 
+        <VAR = can_go>
+            <TYPE>BOOL</TYPE>
+            <VALUES><VALUE>false</VALUE></VALUES>
+        </VAR>
     </VARDECLARATION>
 
     <FUNC name = extend>
@@ -376,10 +380,6 @@
         <DO>
             <CALL>extend</CALL>
             <VARDECLARATION>
-                <VAR = can_go>
-                    <TYPE>BOOL</TYPE>
-                    <VALUES><VALUE>false</VALUE></VALUES>
-                </VAR>
                 <VAR = x_>
                     <TYPE>INT</TYPE>
                     <VALUES><VAR name = x></VAR></VALUES>
@@ -426,7 +426,7 @@
                         </ASSIGN></DO>
                     </CONDITION>
                     <CONDITION>
-                        <CHECK><EQ><VALUE>0</VALUE><VAR name = direction></VAR></EQ></CHECK>
+                        <CHECK><EQ><VALUE>3</VALUE><VAR name = direction></VAR></EQ></CHECK>
                         <DO><ASSIGN>
                             <ADD><VAR name = y></VAR><VALUE>1</VALUE></ADD>
                             <TO><VAR name = y_></VAR></TO>
@@ -450,18 +450,30 @@
                     </AND></CHECK>
                 <DO>
                     <CALL>scan</CALL>
+                    <GETDRONSCOUNT>d</GETDRONSCOUNT>
                 </WHILE>
 
                 <ASSIGN>
-                    <NOT><EQ>
-                        <VAR name = MAP>
-                            <DIM>
-                                <INDEX><VAR name = x_></VAR></INDEX>
-                                <INDEX><VAR name = y_></VAR></INDEX>
-                            </DIM>
-                        </VAR>
-                        <VALUE>WALL</VALUE>
-                    </EQ></NOT>
+                    <OR>
+                        <EQ>
+                            <VAR name = MAP>
+                                <DIM>
+                                    <INDEX><VAR name = x_></VAR></INDEX>
+                                    <INDEX><VAR name = y_></VAR></INDEX>
+                                </DIM>
+                            </VAR>
+                            <VALUE>EMPTY</VALUE>
+                        </EQ>
+                        <EQ>
+                            <VAR name = MAP>
+                                <DIM>
+                                    <INDEX><VAR name = x_></VAR></INDEX>
+                                    <INDEX><VAR name = y_></VAR></INDEX>
+                                </DIM>
+                            </VAR>
+                            <VALUE>EXIT</VALUE>
+                        </EQ>
+                    </OR>
                     <TO>
                         <VAR name = can_go></VAR>
                     </TO>
@@ -478,44 +490,25 @@
 
                             <SWITCH>
                                 <CONDITION>
-                                    <CHECK><EQ><MAX><VALUE>0</VALUE><VAR name = direction></VAR></MAX><VALUE>0</VALUE></EQ></CHECK>
+                                    <CHECK><NOT><EQ><MIN><VALUE>0</VALUE><VAR name = direction></VAR></MIN><VALUE>0</VALUE></EQ></NOT></CHECK>
                                     <DO><ASSIGN><ADD><VAR name = direction></VAR><VALUE>4</VALUE></ADD><TO><VAR name = direction></VAR></TO></ASSIGN></DO>
                                 </CONDITION>
                             </SWITCH>
                         </DO>
                     </CONDITION>
                 </SWITCH>
-
-                <SWITCH>
-                    <CONDITION>
-                        <CHECK>
-                            <NOT><OR>
-                                <EQ>
-                                    <VAR name = MAP>
-                                        <DIM>
-                                            <INDEX><VAR name = x_></VAR></INDEX>
-                                            <INDEX><VAR name = y_></VAR></INDEX>
-                                        </DIM>
-                                    </VAR>
-                                    <VALUE>WALL</VALUE>
-                                </EQ>
-                                <EQ>
-                                    <VAR name = MAP>
-                                        <DIM>
-                                            <INDEX><VAR name = x_></VAR></INDEX>
-                                            <INDEX><VAR name = y_></VAR></INDEX>
-                                        </DIM>
-                                    </VAR>
-                                    <VALUE>UNDEF</VALUE>
-                                </EQ>
-                            </OR></NOT>
-                        </CHECK>
-                        <DO>
-                            <CALL>step</CALL>
-                        </DO>
-                    </CONDITION>
-                </SWITCH>
             </WHILE>
+            <SWITCH>
+                <CONDITION>
+                    <CHECK>
+                        <VAR name = can_go></VAR>
+                    </CHECK>
+                    <DO>
+                        <CALL>step</CALL>
+                        <ASSIGN><VALUE>false</VALUE><TO><VAR name = can_go></VAR></TO></ASSIGN>
+                    </DO>
+                </CONDITION>
+            </SWITCH>
         </WHILE>
     </FUNC>
 
